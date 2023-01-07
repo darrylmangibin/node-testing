@@ -1,5 +1,5 @@
 import 'module-alias/register';
 
-import app from '@/src/index';
+import server from '@/src/server';
 
-app.listEndpoints(process.argv[2]);
+server.listEndpoints(process.argv[2]);
