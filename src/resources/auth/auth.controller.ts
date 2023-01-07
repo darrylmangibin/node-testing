@@ -1,3 +1,4 @@
+import signToken from '@/utils/token/sign.token';
 import { NextFunction, Request, Response } from 'express';
 import AuthService from './auth.service';
 
@@ -8,7 +9,9 @@ class AuthController {
     try {
       const user = await this.authService.register(req.body);
 
-      console.log(user);
+      const token = signToken({ id: user.id });
+
+      res.status(201).json({ token });
     } catch (error) {
       next(error);
     }
