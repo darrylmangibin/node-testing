@@ -7,7 +7,10 @@ declare global {
     registerRoutes: () => void;
   }
 
-  var app: Express;
+  interface AppTimestamps {
+    createdAt: Date;
+    updatedAt: Date;
+  }
 }
 
 export {};
