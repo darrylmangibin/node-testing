@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { JwtPayload } from 'jsonwebtoken';
 
 declare global {
   interface AppRoute {
@@ -10,6 +11,10 @@ declare global {
   interface AppTimestamps {
     createdAt: Date;
     updatedAt: Date;
+  }
+
+  interface AppPayload extends JwtPayload {
+    id: string;
   }
 }
 
