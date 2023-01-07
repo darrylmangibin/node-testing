@@ -6,6 +6,8 @@ declare global {
     router: Router;
     registerRoutes: () => void;
   }
+
+  var app: Express;
 }
 
 export {};
