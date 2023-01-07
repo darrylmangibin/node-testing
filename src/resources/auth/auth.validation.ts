@@ -6,3 +6,8 @@ export const authRegisterValidation = Joi.object<UserData>({
   email: Joi.string().required().email(),
   password: Joi.string().required().min(6),
 });
+
+export const authLoginValidation = Joi.object<UserData>({
+  email: Joi.string().required().email(),
+  password: Joi.string().required(),
+});

@@ -1,7 +1,7 @@
 import validationMiddleware from '@/middleware/validation.middleware';
 import { Router } from 'express';
 import AuthController from './auth.controller';
-import { authRegisterValidation } from './auth.validation';
+import { authLoginValidation, authRegisterValidation } from './auth.validation';
 
 class AuthRoutes implements AppRoute {
   public path = 'auth';
@@ -18,6 +18,12 @@ class AuthRoutes implements AppRoute {
       '/register',
       validationMiddleware(authRegisterValidation),
       this.authController.register
+    );
+
+    this.router.post(
+      '/login',
+      validationMiddleware(authLoginValidation),
+      this.authController.login
     );
   }
 }

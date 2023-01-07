@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import User from '@/resources/user/user.model';
 import { UserData } from '@/resources/user/user.interface';
 import ErrorException from '@/utils/exceptions/error.exception';
+import comparePassword from '@/utils/password/compare.password';
 
 class AuthService {
   private User = User;
@@ -28,6 +29,22 @@ class AuthService {
       await session.abortTransaction();
       await session.endSession();
 
+      throw error;
+    }
+  };
+
+  public login = async (body: Pick<UserData, 'email' | 'password'>) => {
+    try {
+      const user = await this.User.findOne({ email: body.email }).select('+password');
+
+      const isMatchPassword = await comparePassword(body.password, user?.password);
+
+      if (!user || !isMatchPassword) {
+        throw new ErrorException('Invalid credentials', 401);
+      }
+
+      return user;
+    } catch (error) {
       throw error;
     }
   };

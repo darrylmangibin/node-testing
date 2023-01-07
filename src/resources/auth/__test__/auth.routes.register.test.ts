@@ -6,7 +6,7 @@ import UserFactory from '@/resources/user/user.factory';
 
 const endpoint = '/api/auth/register';
 
-describe(`Auth Register - ${endpoint}`, () => {
+describe(`AuthRoutes Register - ${endpoint}`, () => {
   const invalidUserData = {
     name: '',
     email: 'example',

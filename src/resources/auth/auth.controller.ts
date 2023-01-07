@@ -16,6 +16,18 @@ class AuthController {
       next(error);
     }
   };
+
+  public login = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const user = await this.authService.login(req.body);
+
+      const token = signToken({ id: user.id });
+
+      res.status(200).json({ token });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default AuthController;
