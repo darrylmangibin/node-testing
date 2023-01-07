@@ -55,3 +55,5 @@ abstract class FactoryDatabase<T = {}, U = {}> {
     }
   };
 }
+
+export default FactoryDatabase;
