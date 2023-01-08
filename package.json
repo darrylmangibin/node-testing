@@ -9,7 +9,8 @@
     "build": "tsc",
     "postinstall": "npm run build",
     "test": "jest",
-    "endpoints": "node dist/utils/scripts/endpoints.script"
+    "endpoints": "node dist/utils/scripts/endpoints.script",
+    "seeder": "node dist/utils/scripts/seeder.script"
   },
   "author": "",
   "license": "ISC",
