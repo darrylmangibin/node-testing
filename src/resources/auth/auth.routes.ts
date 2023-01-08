@@ -6,6 +6,7 @@ import AuthController from './auth.controller';
 import {
   authLoginValidation,
   authRegisterValidation,
+  authUpdatePasswordValidation,
   authUpdateProfileValidation,
 } from './auth.validation';
 
@@ -41,6 +42,13 @@ class AuthRoutes implements AppRoute {
         this.authController.updateProfile
       )
       .delete(authMiddleware, this.authController.deleteProfile);
+
+    this.router.put(
+      '/update-password',
+      authMiddleware,
+      validationMiddleware(authUpdatePasswordValidation),
+      this.authController.updatePassword
+    );
   }
 }
 

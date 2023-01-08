@@ -4,6 +4,8 @@ import User from '@/resources/user/user.model';
 import { UserData } from '@/resources/user/user.interface';
 import ErrorException from '@/utils/exceptions/error.exception';
 import comparePassword from '@/utils/password/compare.password';
+import { AuthUpdatePasswordRequestBody } from './auth.interface';
+import notFoundException from '@/utils/exceptions/notFound.exception';
 
 class AuthService {
   private User = User;
@@ -45,6 +47,39 @@ class AuthService {
 
       return user;
     } catch (error) {
+      throw error;
+    }
+  };
+
+  public updatePassword = async (userId: string, body: AuthUpdatePasswordRequestBody) => {
+    const session = await mongoose.startSession();
+    try {
+      session.startTransaction();
+
+      const user = await this.User.findById(userId).select('+password');
+
+      if (!user) {
+        return notFoundException('No user found');
+      }
+
+      const isMatchPassword = await comparePassword(body.currentPassword, user.password);
+
+      if (!isMatchPassword) {
+        throw new ErrorException('Password incorrect', 400);
+      }
+
+      user.password = body.newPassword;
+
+      const updatedUser = await user.save({ session });
+
+      await session.commitTransaction();
+      await session.endSession();
+
+      return updatedUser;
+    } catch (error) {
+      await session.abortTransaction();
+      await session.endSession();
+
       throw error;
     }
   };

@@ -60,6 +60,16 @@ class AuthController {
       next(error);
     }
   };
+
+  public updatePassword = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const updatedUser = await this.authService.updatePassword(req.user.id, req.body);
+
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default AuthController;
