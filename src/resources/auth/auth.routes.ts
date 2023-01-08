@@ -39,7 +39,8 @@ class AuthRoutes implements AppRoute {
         authMiddleware,
         validationMiddleware(authUpdateProfileValidation),
         this.authController.updateProfile
-      );
+      )
+      .delete(authMiddleware, this.authController.deleteProfile);
   }
 }
 

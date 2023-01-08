@@ -50,6 +50,16 @@ class AuthController {
       next(error);
     }
   };
+
+  public deleteProfile = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const deletedUser = await this.userService.findUserAndDelete(req.user.id);
+
+      res.status(200).json(deletedUser);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default AuthController;
