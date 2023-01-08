@@ -1,3 +1,4 @@
+import { UserDocument } from '@/resources/user/user.interface';
 import { Router } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
 
@@ -15,6 +16,14 @@ declare global {
 
   interface AppPayload extends JwtPayload {
     id: string;
+  }
+
+  var AuthUser: () => UserDocument;
+
+  namespace Express {
+    interface Request {
+      user: UserDocument;
+    }
   }
 }
 
