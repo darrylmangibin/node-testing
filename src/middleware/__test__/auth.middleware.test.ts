@@ -45,7 +45,6 @@ describe('authMiddleware validateToken', () => {
           message: 'jwt malformed',
         })
       );
-      console.log(error);
     }
   });
 
