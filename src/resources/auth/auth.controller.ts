@@ -40,6 +40,16 @@ class AuthController {
       next(error);
     }
   };
+
+  public updateProfile = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const user = await this.userService.findUserAndUpdate(req.user.id, req.body);
+
+      res.status(200).json(user);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default AuthController;

@@ -1,8 +1,13 @@
+import adminMiddleware from '@/middleware/admin.middleware';
 import authMiddleware from '@/middleware/auth.middleware';
 import validationMiddleware from '@/middleware/validation.middleware';
 import { Router } from 'express';
 import AuthController from './auth.controller';
-import { authLoginValidation, authRegisterValidation } from './auth.validation';
+import {
+  authLoginValidation,
+  authRegisterValidation,
+  authUpdateProfileValidation,
+} from './auth.validation';
 
 class AuthRoutes implements AppRoute {
   public path = 'auth';
@@ -27,7 +32,14 @@ class AuthRoutes implements AppRoute {
       this.authController.login
     );
 
-    this.router.route('/profile').get(authMiddleware, this.authController.getProfile);
+    this.router
+      .route('/profile')
+      .get(authMiddleware, this.authController.getProfile)
+      .put(
+        authMiddleware,
+        validationMiddleware(authUpdateProfileValidation),
+        this.authController.updateProfile
+      );
   }
 }
 

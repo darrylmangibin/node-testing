@@ -11,3 +11,8 @@ export const authLoginValidation = Joi.object<UserData>({
   email: Joi.string().required().email(),
   password: Joi.string().required(),
 });
+
+export const authUpdateProfileValidation = Joi.object<UserData>({
+  email: Joi.string().required().email(),
+  name: Joi.string().required(),
+});
