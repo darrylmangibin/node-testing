@@ -5,11 +5,19 @@ import mongoose from 'mongoose';
 
 let mongod: MongoMemoryReplSet | undefined;
 
-beforeEach(async () => {
+beforeAll(async () => {
   mongod = await memoryDatabase();
 });
 
-afterEach(async () => {
+afterEach(async function () {
+  const collections = await mongoose.connection.db.collections();
+
+  for (let collection of collections) {
+    await collection.deleteMany({});
+  }
+});
+
+afterAll(async () => {
   await mongod?.stop();
 
   await mongoose.disconnect();

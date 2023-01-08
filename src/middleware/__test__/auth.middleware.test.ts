@@ -61,7 +61,6 @@ describe('authMiddleware validateToken', () => {
           statusCode: 401,
         })
       );
-      console.log(error);
     }
   });
 

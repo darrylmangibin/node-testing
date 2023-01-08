@@ -65,7 +65,6 @@ describe('AuthService updatePassword', () => {
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error.ValidationError);
       expect(Object.keys(error.errors)).toEqual(expect.arrayContaining(['password']));
-      console.log(error);
     }
   });
 
