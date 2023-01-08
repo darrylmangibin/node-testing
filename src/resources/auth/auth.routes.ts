@@ -1,3 +1,4 @@
+import authMiddleware from '@/middleware/auth.middleware';
 import validationMiddleware from '@/middleware/validation.middleware';
 import { Router } from 'express';
 import AuthController from './auth.controller';
@@ -25,6 +26,8 @@ class AuthRoutes implements AppRoute {
       validationMiddleware(authLoginValidation),
       this.authController.login
     );
+
+    this.router.route('/profile').get(authMiddleware, this.authController.getProfile);
   }
 }
 
