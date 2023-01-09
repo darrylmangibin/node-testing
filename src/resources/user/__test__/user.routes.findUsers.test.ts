@@ -1,7 +1,6 @@
-import server from '@/src/server';
 import keysPaginate from '@/utils/paginate/keys.paginate';
+import authSupertest from '@/utils/test/authSupertest';
 import generateUser from '@/utils/test/generateUser';
-import supertest from 'supertest';
 import UserFactory from '../user.factory';
 import { UserDocument } from '../user.interface';
 
@@ -25,10 +24,7 @@ describe(`UserRoutes - ${endpoint}`, () => {
   });
 
   it('should return pagination response of users', async () => {
-    let res = await supertest(server.app)
-      .get(endpoint)
-      .query(query)
-      .set('Authorization', `Bearer ${token}`);
+    let res = await authSupertest('GET', endpoint, token).query(query);
 
     expect(res.statusCode).toBe(200);
     expect(Object.keys(res.body)).toEqual(expect.arrayContaining(keysPaginate));
@@ -37,8 +33,7 @@ describe(`UserRoutes - ${endpoint}`, () => {
 
     const selectedUser = users[Math.floor(Math.random() * users.length)];
 
-    res = await supertest(server.app)
-      .get(endpoint)
+    res = await authSupertest('GET', endpoint, token)
       .query({
         ...query,
         filter: {

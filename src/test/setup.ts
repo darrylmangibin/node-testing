@@ -1,3 +1,4 @@
+import UserFactory from '@/resources/user/user.factory';
 import memoryDatabase from '@/utils/database/memory.database';
 import 'module-alias/register';
 import { MongoMemoryReplSet } from 'mongodb-memory-server';

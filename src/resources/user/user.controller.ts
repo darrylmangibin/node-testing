@@ -23,6 +23,16 @@ class UserController {
       next(error);
     }
   };
+
+  public findUserById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const user = await this.userService.findUserById(req.params.userId);
+
+      res.status(200).json(user);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default UserController;
