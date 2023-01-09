@@ -29,6 +29,16 @@ class CommentController {
       next(error);
     }
   };
+
+  public findCommentById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const comment = await this.commentService.findCommentById(req.params.commentId);
+
+      res.status(200).json(comment);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default CommentController;

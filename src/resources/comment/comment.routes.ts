@@ -16,6 +16,10 @@ class CommentRoutes implements AppRoute {
 
   public registerRoutes() {
     this.router.route('/').get(authMiddleware, this.commentController.findComments);
+
+    this.router
+      .route('/:commentId')
+      .get(authMiddleware, this.commentController.findCommentById);
   }
 }
 
