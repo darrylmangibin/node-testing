@@ -4,7 +4,9 @@ import PostController from './post.controller';
 
 class PostRoutes implements AppRoute {
   public path = 'posts';
-  public router = Router();
+  public router = Router({
+    mergeParams: true,
+  });
 
   private postController = new PostController();
 

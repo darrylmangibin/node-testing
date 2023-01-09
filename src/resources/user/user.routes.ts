@@ -4,18 +4,22 @@ import validationMiddleware from '@/middleware/validation.middleware';
 import { Router } from 'express';
 import UserController from './user.controller';
 import { userUpdateValidation } from './user.validation';
+import PostRoutes from '@/resources/post/post.routes';
 
 class UserRoutes implements AppRoute {
   public path = 'users';
   public router = Router();
 
   private userController = new UserController();
+  private postRoutes = new PostRoutes();
 
   constructor() {
     this.registerRoutes();
   }
 
   public registerRoutes() {
+    this.router.use('/:userId/posts', this.postRoutes.router);
+
     this.router.route('/').get(authMiddleware, this.userController.findUsers);
 
     this.router

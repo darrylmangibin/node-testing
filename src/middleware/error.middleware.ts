@@ -3,11 +3,14 @@ import { ErrorRequestHandler } from 'express';
 import { MongoServerError } from 'mongodb';
 import { Error } from 'mongoose';
 import Joi from 'joi';
+import 'dotenv/config';
 
 const errorMiddleware: ErrorRequestHandler = (err: ErrorException, req, res, next) => {
   let error = { ...err };
 
-  console.log(err);
+  if (process.env.NODE_ENV === 'development') {
+    console.log(err);
+  }
 
   let errorObject: Record<string, unknown> = {};
 

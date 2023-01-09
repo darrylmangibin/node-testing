@@ -9,9 +9,13 @@ class PostController {
 
   public findPosts = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const query: FilterQuery<PostData> = {
+      let query: FilterQuery<PostData> = {
         ...(req.query.filter as unknown as FilterQuery<PostData>),
       };
+
+      if (req.params.userId) {
+        query = { ...query, user: req.params.userId };
+      }
 
       const options = optionsPaginate(req.query);
 

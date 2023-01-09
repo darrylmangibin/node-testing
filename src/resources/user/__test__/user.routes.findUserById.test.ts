@@ -1,3 +1,5 @@
+import PostFactory from '@/resources/post/post.factory';
+import { PostDocument } from '@/resources/post/post.interface';
 import authSupertest from '@/utils/test/authSupertest';
 import generateUser from '@/utils/test/generateUser';
 import { Types } from 'mongoose';
@@ -48,5 +50,19 @@ describe(`UserRoutes - ${endpoint}/:userId`, () => {
         email: randomUser.email,
       })
     );
+  });
+
+  it('should return user posts', async () => {
+    const { user, token } = await generateUser();
+    const userPosts = await new PostFactory().createMany(5, { user: user.id });
+    const otherPost = await new PostFactory().create();
+
+    const res = await authSupertest('GET', `${endpoint}/${user.id}/posts`, token);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.totalDocs).toEqual(userPosts.length);
+    expect(
+      res.body.docs.map((doc: PostDocument) => doc.id).includes(otherPost.id)
+    ).toBeFalsy();
   });
 });
