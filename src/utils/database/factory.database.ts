@@ -31,7 +31,7 @@ abstract class FactoryDatabase<T = {}, U = {}> {
     }
   };
 
-  public insertName = async (args: Partial<U>[]) => {
+  public insertMany = async (args: Partial<U>[]) => {
     try {
       const dataArray: U[] = [];
 
