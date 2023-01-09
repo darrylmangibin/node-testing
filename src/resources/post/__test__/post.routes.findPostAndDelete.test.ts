@@ -1,3 +1,5 @@
+import CommentFactory from '@/resources/comment/comment.factory';
+import Comment from '@/resources/comment/comment.model';
 import { UserDocument } from '@/resources/user/user.interface';
 import server from '@/src/server';
 import generateUser from '@/utils/test/generateUser';
@@ -59,6 +61,9 @@ describe(`PostRoutes - ${endpoint}/:postId`, () => {
   });
 
   it('should return deleted post success response', async () => {
+    const comments = await new CommentFactory().createMany(5, { post: post.id });
+    const otherComment = await new CommentFactory().create();
+
     const res = await supertest(server.app).delete(`${endpoint}/${post.id}`).set(auth);
 
     const deletedPost = await Post.findById(post.id);
@@ -70,5 +75,7 @@ describe(`PostRoutes - ${endpoint}/:postId`, () => {
       })
     );
     expect(deletedPost).toBeNull();
+    expect(await Comment.find({ post: post.id })).toEqual([]);
+    expect(await Comment.findById(otherComment.id)).not.toBeNull();
   });
 });

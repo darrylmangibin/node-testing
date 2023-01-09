@@ -1,3 +1,7 @@
+import CommentFactory from '@/resources/comment/comment.factory';
+import Comment from '@/resources/comment/comment.model';
+import PostFactory from '@/resources/post/post.factory';
+import Post from '@/resources/post/post.model';
 import server from '@/src/server';
 import signToken from '@/utils/token/sign.token';
 import supertest from 'supertest';
@@ -24,6 +28,17 @@ describe(`UserRoutes - ${endpoint}/:userId`, () => {
     const token = signToken({ id: admin.id });
     const randomIndex = Math.floor(Math.random() * users.length);
     const randomUser = users[randomIndex];
+    let posts = await new PostFactory().createMany(5, { user: randomUser.id });
+    const randomPost = posts[Math.floor(Math.random() * posts.length)];
+    let comments = await new CommentFactory().createMany(5, {
+      user: randomUser.id,
+      post: randomPost.id,
+    });
+    const otherPost = await new PostFactory().create();
+    const otherComment = await new CommentFactory().create();
+
+    expect(await Post.find({ user: randomUser.id })).toHaveLength(posts.length);
+    expect(await Comment.find({ user: randomUser.id })).toHaveLength(comments.length);
 
     const res = await supertest(server.app)
       .delete(`${endpoint}/${randomUser.id}`)
@@ -38,5 +53,9 @@ describe(`UserRoutes - ${endpoint}/:userId`, () => {
     const userIds = users.map(user => user.id);
 
     expect(userIds.includes(randomUser.id)).toBeFalsy();
+    expect(await Post.find({ user: randomUser.id })).toEqual([]);
+    expect(await Comment.find({ user: randomUser.id })).toEqual([]);
+    expect(await Post.findById(otherPost.id)).not.toBeNull();
+    expect(await Comment.findById(otherComment.id)).not.toBeNull();
   });
 });
