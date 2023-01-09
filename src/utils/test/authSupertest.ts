@@ -12,7 +12,7 @@ function authSupertest<T extends {} = {}>(
   method: AuthSupertest['method'],
   endpoint: AuthSupertest['endpoint'],
   token?: AuthSupertest['token'],
-  body?: AuthSupertest<T>['body']
+  body?: AuthSupertest<Partial<T>>['body']
 ) {
   switch (method) {
     case 'GET':

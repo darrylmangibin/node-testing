@@ -33,6 +33,19 @@ class UserController {
       next(error);
     }
   };
+
+  public findUserAndUpdate = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const updatedUser = await this.userService.findUserAndUpdate(
+        req.params.userId,
+        req.body
+      );
+
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default UserController;
