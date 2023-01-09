@@ -16,6 +16,8 @@ class PostRoutes implements AppRoute {
 
   public registerRoutes() {
     this.router.route('/').get(authMiddleware, this.postController.findPosts);
+
+    this.router.route('/:postId').get(authMiddleware, this.postController.findPostById);
   }
 }
 
