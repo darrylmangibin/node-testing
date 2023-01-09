@@ -46,6 +46,16 @@ class UserController {
       next(error);
     }
   };
+
+  public findUserAndDelete = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const deletedUser = await this.userService.findUserAndDelete(req.params.userId);
+
+      res.status(200).json(deletedUser);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default UserController;
