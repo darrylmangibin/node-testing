@@ -39,6 +39,20 @@ class CommentController {
       next(error);
     }
   };
+
+  public createComment = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const newPost = await this.commentService.createComment({
+        ...req.body,
+        post: req.params.postId,
+        user: req.user.id,
+      });
+
+      res.status(201).json(newPost);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default CommentController;
