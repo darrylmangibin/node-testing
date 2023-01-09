@@ -38,9 +38,11 @@ describe('PostService createPost', () => {
     expect(post).toEqual(
       expect.objectContaining({
         id: post.id,
-        ...body,
+        title: body.title,
+        description: body.description,
       })
     );
+    expect(post.user.toString()).toEqual(body.user);
     expect(createdPostFromDatabase).not.toBeNull();
   });
 });

@@ -3,6 +3,7 @@ import validationMiddleware from '@/middleware/validation.middleware';
 import { Router } from 'express';
 import PostController from './post.controller';
 import { postCreateOrUpdateValidation } from './post.validation';
+import CommentRoutes from '../comment/comment.routes';
 
 class PostRoutes implements AppRoute {
   public path = 'posts';
@@ -11,12 +12,15 @@ class PostRoutes implements AppRoute {
   });
 
   private postController = new PostController();
+  private commentRoutes = new CommentRoutes();
 
   constructor() {
     this.registerRoutes();
   }
 
   public registerRoutes() {
+    this.router.use('/:postId/comments', this.commentRoutes.router);
+
     this.router
       .route('/')
       .get(authMiddleware, this.postController.findPosts)
