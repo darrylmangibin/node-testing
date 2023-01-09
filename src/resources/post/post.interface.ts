@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+import { CommentData } from '../comment/comment.interface';
 import { UserDocument } from '../user/user.interface';
 
 export interface PostData {
@@ -7,4 +8,6 @@ export interface PostData {
   user: string | UserDocument;
 }
 
-export interface PostDocument extends Document, PostData, AppTimestamps {}
+export interface PostDocument extends Document, PostData, AppTimestamps {
+  comments: CommentData[];
+}

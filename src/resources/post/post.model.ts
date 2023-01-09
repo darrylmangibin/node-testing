@@ -14,6 +14,12 @@ PostSchema.pre<CommentDocument>('remove', async function (next) {
   next();
 });
 
+PostSchema.virtual('comments', {
+  ref: Comment,
+  localField: '_id',
+  foreignField: 'post',
+});
+
 const Post = model<PostData, PaginateModel<PostDocument>>('Post', PostSchema);
 
 export default Post;
