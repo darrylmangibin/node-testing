@@ -86,6 +86,27 @@ class CommentService {
     }
   };
 
+  public findCommentAndDelete = async (commentId: string) => {
+    const session = await mongoose.startSession();
+    try {
+      session.startTransaction();
+
+      const comment = await this.findCommentById(commentId);
+
+      const deletedComment = await comment.remove({ session });
+
+      await session.commitTransaction();
+      await session.endSession();
+
+      return deletedComment;
+    } catch (error) {
+      await session.abortTransaction();
+      await session.endSession();
+
+      throw error;
+    }
+  };
+
   public checkCommentOwner(comment: CommentDocument, userId: string) {
     if (comment.user.toString() !== userId) {
       throw new ErrorException('Forbidden. Not allowed to perform this action', 403);

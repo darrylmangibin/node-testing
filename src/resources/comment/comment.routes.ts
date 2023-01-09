@@ -33,7 +33,8 @@ class CommentRoutes implements AppRoute {
         authMiddleware,
         validationMiddleware(commentCreateOrUpdateValidation),
         this.commentController.findCommentAndUpdate
-      );
+      )
+      .delete(authMiddleware, this.commentController.findCommentAndDelete);
   }
 }
 

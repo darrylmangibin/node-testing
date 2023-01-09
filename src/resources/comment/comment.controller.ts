@@ -74,6 +74,26 @@ class CommentController {
       next(error);
     }
   };
+
+  public findCommentAndDelete = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const comment = await this.commentService.findCommentById(req.params.commentId);
+
+      this.commentService.checkCommentOwner(comment, req.user.id);
+
+      const deletedComment = await this.commentService.findCommentAndDelete(
+        req.params.commentId
+      );
+
+      res.status(200).json(deletedComment);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default CommentController;
