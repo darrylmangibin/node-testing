@@ -49,6 +49,8 @@ class AuthRoutes implements AppRoute {
       validationMiddleware(authUpdatePasswordValidation),
       this.authController.updatePassword
     );
+
+    this.router.get('/posts', authMiddleware, this.authController.findPosts);
   }
 }
 

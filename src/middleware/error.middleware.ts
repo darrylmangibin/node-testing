@@ -7,6 +7,8 @@ import Joi from 'joi';
 const errorMiddleware: ErrorRequestHandler = (err: ErrorException, req, res, next) => {
   let error = { ...err };
 
+  console.log(err);
+
   let errorObject: Record<string, unknown> = {};
 
   if (err instanceof MongoServerError) {

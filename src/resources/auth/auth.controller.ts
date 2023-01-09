@@ -1,11 +1,16 @@
+import optionsPaginate from '@/utils/paginate/options.paginate';
 import signToken from '@/utils/token/sign.token';
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, query, Request, Response } from 'express';
+import { FilterQuery } from 'mongoose';
+import { PostData } from '../post/post.interface';
+import PostService from '../post/post.service';
 import UserService from '../user/user.service';
 import AuthService from './auth.service';
 
 class AuthController {
   private authService = new AuthService();
   private userService = new UserService();
+  private postService = new PostService();
 
   public register = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -66,6 +71,23 @@ class AuthController {
       const updatedUser = await this.authService.updatePassword(req.user.id, req.body);
 
       res.status(200).json(updatedUser);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public findPosts = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const query: FilterQuery<PostData> = {
+        user: req.user.id,
+        ...(req.query.filter as unknown as FilterQuery<PostData>),
+      };
+
+      const options = optionsPaginate(req.query);
+
+      const results = await this.postService.findPosts(query, options);
+
+      res.status(200).json(results);
     } catch (error) {
       next(error);
     }
