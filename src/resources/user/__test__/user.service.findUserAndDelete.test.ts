@@ -1,4 +1,7 @@
+import PostFactory from '@/resources/post/post.factory';
+import Post from '@/resources/post/post.model';
 import ErrorException from '@/utils/exceptions/error.exception';
+import generateUser from '@/utils/test/generateUser';
 import { Types } from 'mongoose';
 import UserFactory from '../user.factory';
 import { UserDocument } from '../user.interface';
@@ -31,5 +34,26 @@ describe('UserService findUserAndDelete', () => {
 
     expect(await User.findById(user.id)).toBeNull();
     expect(deletedUser.id).toBe(user.id);
+  });
+
+  it('should delete user posts only when user is deleted', async () => {
+    const user = await new UserFactory().create();
+    const postNotBelongToUser = await new PostFactory().create();
+    const userPosts = await new PostFactory().createMany(2, { user: user.id });
+
+    let posts = await Post.find({ user: user.id });
+    posts.forEach(post => {
+      expect(user.id).toEqual(post.user.toString());
+    });
+
+    const deletedUser = await userService.findUserAndDelete(user.id);
+
+    posts = await Post.find({ user: deletedUser.id });
+
+    expect(posts).toEqual([]);
+
+    const post = await Post.findById(postNotBelongToUser.id);
+
+    expect(post).not.toBeNull();
   });
 });

@@ -2,6 +2,7 @@ import hashPassword from '@/utils/password/hash.password';
 import { model, PaginateModel } from 'mongoose';
 import paginate from 'mongoose-paginate-v2';
 import { UserData, UserDocument } from './user.interface';
+import Post from '@/resources/post/post.model';
 
 import UserSchema from './user.schema';
 
@@ -15,6 +16,10 @@ UserSchema.pre('save', async function (next) {
   this.password = await hashPassword(this.password);
 
   next();
+});
+
+UserSchema.pre<UserDocument>('remove', async function (next) {
+  await Post.deleteMany({ user: this._id });
 });
 
 const User = model<UserData, PaginateModel<UserDocument>>('User', UserSchema);
