@@ -33,7 +33,8 @@ class PostRoutes implements AppRoute {
         authMiddleware,
         validationMiddleware(postCreateOrUpdateValidation),
         this.postController.findPostAndUpdate
-      );
+      )
+      .delete(authMiddleware, this.postController.findPostAndDelete);
   }
 }
 

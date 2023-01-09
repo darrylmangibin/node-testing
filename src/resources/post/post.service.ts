@@ -83,6 +83,27 @@ class PostService {
     }
   };
 
+  public findPostAndDelete = async (postId: string) => {
+    const session = await mongoose.startSession();
+    try {
+      session.startTransaction();
+
+      const post = await this.findPostById(postId);
+
+      const deletedPost = await post.remove({ session });
+
+      await session.commitTransaction();
+      await session.endSession();
+
+      return deletedPost;
+    } catch (error) {
+      await session.abortTransaction();
+      await session.endSession();
+
+      throw error;
+    }
+  };
+
   public checkPostOwner(post: PostDocument, userId: string) {
     if (post.user.toString() !== userId) {
       throw new ErrorException('Forbidden. Not allowed to perform this action', 403);
