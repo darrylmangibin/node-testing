@@ -53,6 +53,27 @@ class CommentController {
       next(error);
     }
   };
+
+  public findCommentAndUpdate = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const comment = await this.commentService.findCommentById(req.params.commentId);
+
+      this.commentService.checkCommentOwner(comment, req.user.id);
+
+      const updatedComment = await this.commentService.findCommentAndUpdate(
+        req.params.commentId,
+        req.body
+      );
+
+      res.status(200).json(updatedComment);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default CommentController;
