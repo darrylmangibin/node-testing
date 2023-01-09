@@ -41,6 +41,19 @@ class PostController {
     }
   };
 
+  public createPost = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const createdPost = await this.postService.createPost({
+        ...req.body,
+        user: req.user.id,
+      });
+
+      res.status(201).json(createdPost);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   private isReqQueryPopulateIsPopulateOptions = (
     reqQueryPopulate: unknown
   ): reqQueryPopulate is PopulateOptions => {
