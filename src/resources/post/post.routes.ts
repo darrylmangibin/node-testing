@@ -26,7 +26,14 @@ class PostRoutes implements AppRoute {
         this.postController.createPost
       );
 
-    this.router.route('/:postId').get(authMiddleware, this.postController.findPostById);
+    this.router
+      .route('/:postId')
+      .get(authMiddleware, this.postController.findPostById)
+      .put(
+        authMiddleware,
+        validationMiddleware(postCreateOrUpdateValidation),
+        this.postController.findPostAndUpdate
+      );
   }
 }
 

@@ -1,7 +1,8 @@
+import ErrorException from '@/utils/exceptions/error.exception';
 import optionsPaginate from '@/utils/paginate/options.paginate';
 import { NextFunction, Request, Response } from 'express';
 import { FilterQuery, PopulateOptions } from 'mongoose';
-import { PostData } from './post.interface';
+import { PostData, PostDocument } from './post.interface';
 import PostService from './post.service';
 
 class PostController {
@@ -49,6 +50,23 @@ class PostController {
       });
 
       res.status(201).json(createdPost);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public findPostAndUpdate = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const post = await this.postService.findPostById(req.params.postId);
+
+      this.postService.checkPostOwner(post, req.user.id);
+
+      const updatedPost = await this.postService.findPostAndUpdate(
+        req.params.postId,
+        req.body
+      );
+
+      res.status(200).json(updatedPost);
     } catch (error) {
       next(error);
     }

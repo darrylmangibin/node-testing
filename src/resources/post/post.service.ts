@@ -1,6 +1,7 @@
+import ErrorException from '@/utils/exceptions/error.exception';
 import notFoundException from '@/utils/exceptions/notFound.exception';
 import mongoose, { FilterQuery, PaginateOptions, PopulateOptions } from 'mongoose';
-import { PostData } from './post.interface';
+import { PostData, PostDocument } from './post.interface';
 import Post from './post.model';
 
 class PostService {
@@ -54,6 +55,39 @@ class PostService {
       throw error;
     }
   };
+
+  public findPostAndUpdate = async (postId: string, body: Partial<PostData>) => {
+    const session = await mongoose.startSession();
+    try {
+      session.startTransaction();
+
+      const post = await this.Post.findByIdAndUpdate(postId, body, {
+        new: true,
+        runValidators: true,
+        session,
+      });
+
+      if (!post) {
+        return notFoundException('Post not found');
+      }
+
+      await session.commitTransaction();
+      await session.endSession();
+
+      return post;
+    } catch (error) {
+      await session.abortTransaction();
+      await session.endSession();
+
+      throw error;
+    }
+  };
+
+  public checkPostOwner(post: PostDocument, userId: string) {
+    if (post.user.toString() !== userId) {
+      throw new ErrorException('Forbidden. Not allowed to perform this action', 403);
+    }
+  }
 }
 
 export default PostService;
